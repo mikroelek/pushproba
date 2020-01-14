@@ -70,7 +70,7 @@ A Twitter API-ja nem engedélyezi kétszer, egymás után ugyan annak a szövegn
 	/tweet.py		- automatikus tweetelés
 	/Main.py		- végleges futtatható kód, az előző kódokat meghívva
 	
-![Abra] (https://i.imgur.com/IWezBVI.png)
+![Abra](https://i.imgur.com/IWezBVI.png)
 
 #### Megoldás
 
