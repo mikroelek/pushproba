@@ -110,6 +110,8 @@ Ezek után *formatted_date=now.strftime('%Y-%m-%d %H:%M:%S')*-el a megfelelő fo
 
 
 ```python
+import Gyroscope
+import Arrows
 	...
 	if (pitch>90 and pitch <270) or (roll>90 and roll <270):
 		s.set_pixels( Arrows.piros_x() )
@@ -145,6 +147,27 @@ Az arrows.py függvény meghívásával és a kritikus dőlésszögek 50 fokra b
 
 A segítségkérő üzenet létrehozásához készíteni kellett egy Developer Twitter Accountot, amihez különböző *kulcsokat*, *secret külcsokat*, *tokeneket*, és *secret tokeneket* kaptunk. Mindemellett az operációs rendszerre (Linux) telepíteni kellet egy tweepy nevű modult amivel kapcsolatba tudunk lépni a Twitterel a posztoláshoz.
 A *logger= Streamer*()* segítségével tud a program létrehozni egy online grafikus ábrát az adatok megjelenítésére, ehhez is kaptunk egy *access key*-t, amit a függvényben kell beállítanunk.
+
+```python
+	...
+	Gyroscope.gyro()
+	logger.log("Pitch: ",globals.pitch)
+	logger.log("Roll: ",globals.roll)
+	logger.log("Yaw: ",globals.yaw)
+	logger.log("X: ",globals.x)
+	logger.log("Y: ",globals.y)
+	logger.log("Z: ",globals.z)
+	insertdatabase.insert(globals.pitch,globals.roll,globals.yaw,globals.x,globals.y,globals.z)
+	...
+```
+Ez a programrész az adatbázis és a grafikai elemek megjelenítésére szolgál.
+```python
+	if( not Felborul):
+		api.update_status('Felborultam,kuldj segitseget! p:{0}'.format(globals.pitch) )
+		print('Borulas')
+		Felborul=True
+```
+Logikai változót létrehozva tudtuk elérni, hogy ne folyamatosan, hanem csak egyszer küldjön üzentet a balesetről.
 
 #### Jövőbeli továbbfejlesztés
 
