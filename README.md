@@ -43,6 +43,10 @@ Egy kommunikációs csatornán keresztül válik publikusság a baleset.
 
 A program leállítása nem automatikus, mert egyéni döntés, meddig akarjuk használni. Abban az esetben, ha a programot huzamosabb ideig használjuk, a memória képes betelni és az adatokat nem rögzíteni az adatbázisba.
 
+*Megjegyzés*
+
+Az egyszerűbb tesztelés és vizsgán a projekt bemutatása miatt a kritikus lassulás értékét 2G-re változtattuk.
+
 ## Fejlesztői dokumentáció
 
 #### Tervezés
