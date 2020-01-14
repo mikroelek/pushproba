@@ -69,6 +69,8 @@ A Twitter API-ja nem engedélyezi kétszer, egymás után ugyan annak a szövegn
 						LED-mátrixon.
 	/tweet.py		- automatikus tweetelés
 	/Main.py		- végleges futtatható kód, az előző kódokat meghívva
+	
+![Abra] (https://i.imgur.com/IWezBVI.png)
 
 #### Megoldás
 
@@ -100,28 +102,47 @@ A Twitter API-ja nem engedélyezi kétszer, egymás után ugyan annak a szövegn
 A programban szükséges deklarálni a létrehozott adatbázis elérhetőségét és szükséges a jelszót megadni a *mysql.connector.connect()* függvényben. A *mycursor=mydb.cursor()* és a *now=datetime.now()* függvényekkel az adatbázisba való írást és az időt beállítottuk.
 Ezek után *formatted_date=now.strftime('%Y-%m-%d %H:%M:%S')*-el a megfelelő formátumban kapjuk meg a dátumot. A mérések eredményeit és idejét be kell illeszteni a még eddig üres adatbázisunkba. A *sql="""INSERT INTO adatok (datum,pitch,roll,yaw,backwardforward,rightleft,updown)* sora ezt mutatja. A *time.sleep()* függvénnyel állítottunk be 0.2 másodpercenkénti újabb mérést.
 
-*tweet.py*
+*Main.py*
+
+```python
+	...
+	import tweepy
+	...
+	logger= Streamer(bucket_name="Sense Hat Sensor Data", access_key="ist_QsJ_mdh5bnHzduJDFhorX59W811C67q4")
+	...
+```
 
 A segítségkérő üzenet létrehozásához készíteni kellett egy Developer Twitter Accountot, amihez különböző *kulcsokat*, *secret külcsokat*, *tokeneket*, és *secret tokeneket* kaptunk. Mindemellett az operációs rendszerre (Linux) telepíteni kellet egy tweepy nevű modult amivel kapcsolatba tudunk lépni a Twitterel a posztoláshoz.
-```python
-	
+A *logger= Streamer*()* segítségével tud a program létrehozni egy online grafikus ábrát az adatok megjelenítésére, ehhez is kaptunk egy *access key*-t, amit a függvényben kell beállítanunk.
 
-
-```
-*Main.py*
 
 ```python
 	...
 	if (pitch>90 and pitch <270) or (roll>90 and roll <270):
 		s.set_pixels( Arrows.piros_x() )
-		
+	...	
 	elif pitch >40 and pitch <90:
 		s.set_pixels( Arrows.nyil_balra())
 	...
 ```
+
 Az arrows.py függvény meghívásával és a kritikus dőlésszögek 50 fokra beállításával, jelzi ki az eszköz a dölés irányát, illetve a borulást.
 
-
+```python
+	...
+		consumer_key='JoCmFVTD0NpKaVxpT9t8aMf8K'
+                consumer_secret='HobMjR2wOnVvWoxf9nOh7uwyFpqdqOZlfaNVej2vkAC98asG6n'
+                access_token='1083299768514854913-WmiGPShhCsyfkbvHOvTzVGIzm0ka48'
+                access_token_secret='tx5ALfWlLnwfYeOXm5Vbon8Ev08mBVPMq1G1cYxyJ8Gr2'
+                oauth = OAuth(consumer_key,consumer_secret,access_token,access_token_secret)
+                api = tweepy.API(oauth)
+                if( not Felborul):
+                    api.update_status('Felborultam,kuldj segitseget! p:{0}'.format(globals.pitch) )
+                    print('Borulas')
+                    Felborul=True
+	...
+```
+A Twitterel és a tweepyvel való kapcsolódáshoz szükséges 
 #### Jövőbeli továbbfejlesztés
 
 A rendszer a probléma twittelése esetén egy értéket is visszaad a segítségkérő üzenet ütán, ezt egy GPS-modul segítségével koordinátákra lehet cserélni, hogy tudjuk, hol is történt a baleset.
