@@ -3,7 +3,7 @@
 
 #### Összefoglalás
 
-Biztonági rendszerünk autókba behelyezve védelmet nyújt az esetleges balesetek megelőzése ellen. Kritikus dőlésszögeket beállítva, a Sense HAT-en elhelyezett LED-mátrix mutatja, merre dől az autó, és van lehetőség a jármű korrigálására, felborulva pedig egy segítségkérő Twitter üzenetet oszt meg. Az eszköz mindemellett képes arra, hogy hirtelen túl nagy G gyorsulást mérve azt feltételezze, hogy az autó ütközött, így ekkor az ütközésről fog tweetelni. A program elindítását követően folyamatosan gyűjti az adatokat az eszköz egy helyi adatbázisba, amit grafikusan is megjelenít.
+Biztonági rendszerünk autókba behelyezve védelmet nyújt az esetleges balesetek megelőzése ellen. Kritikus dőlésszögeket beállítva, a Sense HAT-en elhelyezett LED-mátrix mutatja, merre dől az autó, és van lehetőség a jármű korrigálására, felborulva pedig egy segítségkérő Twitter üzenetet oszt meg. Az eszköz mindemellett képes arra, hogy hirtelen túl nagy G gyorsulást mérve azt feltételezze, hogy az autó ütközött, így ekkor az ütközésről fog tweetelni. A program elindítását követően folyamatosan gyűjti az adatokat az eszköz egy helyi adatbázisba, amit grafikusan is megjelenít az Initial State nevű oldalon. Mivel online ábrázol a szerkezet minden mérés után, ezért bármilyen eszközről megtekinthető dátumra pontosan (a 14 napos Trial verzión belül).
 
 #### Környezet
 
@@ -18,7 +18,7 @@ Biztonági rendszerünk autókba behelyezve védelmet nyújt az esetleges balese
 	
 	A program	
 		Main.py
-	néven található, a /pi mappában.
+	néven található, a /Documents/MEMS-Projectmunka mappában.
 
 *A program eredménye*
 
@@ -57,7 +57,7 @@ A Twitter API-ja nem engedélyezi kétszer, egymás után ugyan annak a szövegn
 
 * Raspberry Pi, Sense HAT, .py futtatására alkalmas operációs rendszer (Linux).
 * Python III fordítóprogram.
-* Internetwebcímhelye a grafikai megjelenítésre.
+* https://www.initialstate.com/ a grafikai megjelenítésre.
 * Internet és fejlesztői Twitter felhasználó az automatikus üzenetküldésre.
 
 #### Forráskód
@@ -67,9 +67,11 @@ A Twitter API-ja nem engedélyezi kétszer, egymás után ugyan annak a szövegn
 						formátumok beállítása
 	/Arrows.py		- a dőlés függvényében a nyilak megjelnítése a 
 						LED-mátrixon.
-	/tweet.py		- automatikus tweetelés
+	/Gyroscope.py		- tengelyek, szenzorok beállítása					
 	/Main.py		- végleges futtatható kód, az előző kódokat meghívva
 	
+#### Szerkezeti ábra
+
 ![Abra](https://i.imgur.com/IWezBVI.png)
 
 #### Megoldás
@@ -102,18 +104,9 @@ A Twitter API-ja nem engedélyezi kétszer, egymás után ugyan annak a szövegn
 A programban szükséges deklarálni a létrehozott adatbázis elérhetőségét és szükséges a jelszót megadni a *mysql.connector.connect()* függvényben. A *mycursor=mydb.cursor()* és a *now=datetime.now()* függvényekkel az adatbázisba való írást és az időt beállítottuk.
 Ezek után *formatted_date=now.strftime('%Y-%m-%d %H:%M:%S')*-el a megfelelő formátumban kapjuk meg a dátumot. A mérések eredményeit és idejét be kell illeszteni a még eddig üres adatbázisunkba. A *sql="""INSERT INTO adatok (datum,pitch,roll,yaw,backwardforward,rightleft,updown)* sora ezt mutatja. A *time.sleep()* függvénnyel állítottunk be 0.2 másodpercenkénti újabb mérést.
 
+
+
 *Main.py*
-
-```python
-	...
-	import tweepy
-	...
-	logger= Streamer(bucket_name="Sense Hat Sensor Data", access_key="ist_QsJ_mdh5bnHzduJDFhorX59W811C67q4")
-	...
-```
-
-A segítségkérő üzenet létrehozásához készíteni kellett egy Developer Twitter Accountot, amihez különböző *kulcsokat*, *secret külcsokat*, *tokeneket*, és *secret tokeneket* kaptunk. Mindemellett az operációs rendszerre (Linux) telepíteni kellet egy tweepy nevű modult amivel kapcsolatba tudunk lépni a Twitterel a posztoláshoz.
-A *logger= Streamer*()* segítségével tud a program létrehozni egy online grafikus ábrát az adatok megjelenítésére, ehhez is kaptunk egy *access key*-t, amit a függvényben kell beállítanunk.
 
 
 ```python
@@ -130,6 +123,13 @@ Az arrows.py függvény meghívásával és a kritikus dőlésszögek 50 fokra b
 
 ```python
 	...
+	import tweepy
+	...
+	logger= Streamer(bucket_name="Sense Hat Sensor Data", access_key="ist_QsJ_mdh5bnHzduJDFhorX59W811C67q4")
+	...
+```
+```python
+	...
 		consumer_key='JoCmFVTD0NpKaVxpT9t8aMf8K'
                 consumer_secret='HobMjR2wOnVvWoxf9nOh7uwyFpqdqOZlfaNVej2vkAC98asG6n'
                 access_token='1083299768514854913-WmiGPShhCsyfkbvHOvTzVGIzm0ka48'
@@ -142,8 +142,11 @@ Az arrows.py függvény meghívásával és a kritikus dőlésszögek 50 fokra b
                     Felborul=True
 	...
 ```
-A Twitterel és a tweepyvel való kapcsolódáshoz szükséges 
+
+A segítségkérő üzenet létrehozásához készíteni kellett egy Developer Twitter Accountot, amihez különböző *kulcsokat*, *secret külcsokat*, *tokeneket*, és *secret tokeneket* kaptunk. Mindemellett az operációs rendszerre (Linux) telepíteni kellet egy tweepy nevű modult amivel kapcsolatba tudunk lépni a Twitterel a posztoláshoz.
+A *logger= Streamer*()* segítségével tud a program létrehozni egy online grafikus ábrát az adatok megjelenítésére, ehhez is kaptunk egy *access key*-t, amit a függvényben kell beállítanunk.
+
 #### Jövőbeli továbbfejlesztés
 
 A rendszer a probléma twittelése esetén egy értéket is visszaad a segítségkérő üzenet ütán, ezt egy GPS-modul segítségével koordinátákra lehet cserélni, hogy tudjuk, hol is történt a baleset.
-Havi támogatás keretein belül, egy Cloud SQL előfizetést létrehozni, és az adatbázist automatikusan feltölteni, hogy ne csak a lokális szerveren legyen elérhető, hanem online bármilyen eszközről, ugyanis egy esetleges ütközés eseten a Raspberry Pi használhatatlanná válik.
+Havi támogatás keretein belül, egy Initial State vagy Cloud SQL előfizetést létrehozni, és az adatbázist automatikusan feltölteni, hogy ne csak a lokális szerveren legyen elérhető, hanem online bármilyen eszközről, ugyanis egy esetleges ütközés eseten a Raspberry Pi használhatatlanná válik.
