@@ -1,0 +1,5 @@
+sudo apt install mariadb-server #mysql server
+sudo mysql_secure_installation
+sudo mysql-u root -p
+CREATE DATABASE exampledb5;
+CREATE TABLE adatok (datum  DATETIME,pitch FLOAT ,roll FLOAT,yaw FLOAT,backwardforward FLOAT,rightleft FLOAT,updown FLOAT);
